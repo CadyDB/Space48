@@ -7,20 +7,20 @@ using UnityEngine.UI;
 
 public class ShipBehaviour : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float rotationSpeed = 25f;
-    [SerializeField] private GameObject laserPrefab;
-    [SerializeField] private float cooldownTime = 3f;
-    [SerializeField] private Image itemImageHolder;
-    [SerializeField] private TMP_Text introductionField;
-    [SerializeField] private TMP_Text messageField;
+    [SerializeField] private float moveSpeed = 5f; // MovementScript
+    [SerializeField] private float rotationSpeed = 25f; // MovementScript
+    [SerializeField] private GameObject laserPrefab; // Shoot Script
+    [SerializeField] private float cooldownTime = 3f; // Shoot Script
+    [SerializeField] private Image itemImageHolder; // UI
+    [SerializeField] private TMP_Text introductionField; // UI
+    [SerializeField] private TMP_Text messageField; // UI
 
-    private float cooldownCounter = 0f;
-    private List<Color> items = new List<Color>();
-    private int activeItemIndex = -1;
+    private float cooldownCounter = 0f; // Shooting script
+    private List<Color> items = new List<Color>(); // Item Pickup
+    private int activeItemIndex = -1; // Use Item
 
     // Start is called before the first frame update
-    void Start()
+    void Start() // UI spull, TextScript
     {
         StartCoroutine(Introduction());
     }
@@ -37,7 +37,7 @@ public class ShipBehaviour : MonoBehaviour
         messageField.enabled = false;
     }
     // Update is called once per frame
-    void Update()
+    void Update() // Dit gebruikt alles, hoe moet ik dat oproepen?
     {
         Move();   
         Rotate();
@@ -47,7 +47,7 @@ public class ShipBehaviour : MonoBehaviour
 
     }
 
-    void Move() {
+     void Move() { // Move en Rotate, MovementScript
 
         transform.position = transform.position + transform.forward * moveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
         
@@ -55,8 +55,8 @@ public class ShipBehaviour : MonoBehaviour
     void Rotate()
     {
         transform.Rotate(transform.up * rotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
-    }
-    void Shoot() { 
+    } 
+     void Shoot() { // Shooting lasers, Shoot Script
         cooldownCounter += Time.deltaTime;
 
         if(Input.GetKeyDown(KeyCode.Space) && cooldownCounter > cooldownTime)
@@ -70,15 +70,15 @@ public class ShipBehaviour : MonoBehaviour
 
         }
 
-        
-    }
-    private void OnTriggerEnter(Collider other)
+       
+    } 
+     private void OnTriggerEnter(Collider other) // deel van PickUp script
     {
         if (other.gameObject.CompareTag("Item")) {
             PickUpItem(other.gameObject);
         }
     }
-    void PickUpItem(GameObject item) {
+    void PickUpItem(GameObject item) { // Picking up items, PickUp script
 
         Color color = item.gameObject.GetComponent<Renderer>().material.color;
 
@@ -90,9 +90,9 @@ public class ShipBehaviour : MonoBehaviour
 
         itemImageHolder.color = items[activeItemIndex];
         itemImageHolder.enabled = true;
-    }
+    } 
     
-    void CycleItems() {
+    void CycleItems() { // Cycling through items, ItemsScript
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             if (items.Count > 0)
@@ -114,8 +114,8 @@ public class ShipBehaviour : MonoBehaviour
                 itemImageHolder.enabled = false;
             }
         }        
-    }
-    void UseItem()
+    } 
+     void UseItem() // Use Item script
     {
   
         if (Input.GetKeyDown(KeyCode.E) && items.Count > 0 && activeItemIndex != -1) {
@@ -146,7 +146,7 @@ public class ShipBehaviour : MonoBehaviour
             }
             
         }
-    }
+    } 
 
     /*TO DO 
     
